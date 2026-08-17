@@ -1,0 +1,12 @@
+services:
+  # High-Performance Single-Service Full-Stack Deployment (Zero-Latency)
+  - type: web
+    name: careshield-advisor
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build && cd .. && pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FRONTEND_URL
+        value: "*"

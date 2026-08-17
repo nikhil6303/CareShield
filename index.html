@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Churn Prediction & Retention Advisor</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">CareShield</span>
+                    <span class="logo-subtitle">Advisor Suite</span>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="upload-tab" id="nav-upload">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Dataset Upload</span>
+                </button>
+                <button class="nav-item" data-tab="dashboard-tab" id="nav-dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Strategic Dashboard</span>
+                </button>
+                <button class="nav-item" data-tab="member-details-tab" id="nav-member-details">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Member Details</span>
+                </button>
+                <button class="nav-item" data-tab="simulator-tab" id="nav-simulator">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>Retention Advisor</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="strategic-card">
+                    <h4><i class="fa-solid fa-shield-halved"></i> Strategic Goal</h4>
+                    <p>Retention is a core health plan priority. Prevent revenue loss, maintain care continuity, and elevate quality performance measures (HEDIS/Star ratings).</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="main-header">
+                <div class="header-title-wrapper">
+                    <h1>Member Churn Prediction &amp; Retention Advisor</h1>
+                    <p class="header-tagline">Health Plan Retention Decision Support</p>
+                </div>
+                <div class="header-badge" id="api-status-badge">
+                    <span class="status-indicator live"></span>
+                    <span id="api-status-text">Connecting...</span>
+                </div>
+            </header>
+
+            <!-- TAB: Dataset Upload -->
+            <div id="upload-tab" class="tab-content active">
+                <div class="intro-banner">
+                    <div class="intro-content">
+                        <h3>Upload Member Dataset</h3>
+                        <p>Upload a CSV file containing health plan member metrics to run predictive churn analysis, identify individual risk drivers, and compile rule-based retention advisor suggestions.</p>
+                    </div>
+                </div>
+
+                <div class="card form-card" style="max-width: 600px; margin: 32px auto; padding: 30px;">
+                    <div class="card-header" style="border-bottom: none; padding-bottom: 0;">
+                        <div class="header-icon"><i class="fa-solid fa-file-csv"></i></div>
+                        <h3>Import Member Data</h3>
+                    </div>
+                    
+                    <!-- Drop zone: hidden once file is selected -->
+                    <div class="upload-area" id="upload-drop-zone" onclick="document.getElementById('csv-file-input').click()" style="border: 2px dashed var(--border-card); border-radius: 12px; padding: 40px 20px; text-align: center; margin: 20px 0; background: rgba(255, 255, 255, 0.02); transition: var(--transition-smooth);">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 3rem; color: var(--color-secondary); margin-bottom: 15px;"></i>
+                        <p style="margin-bottom: 15px; font-weight: 500;">Drag and drop your member CSV file here, or click to browse.</p>
+                        <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
+                        <button type="button" class="btn" style="background-color: var(--color-secondary); border: none; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                            Browse File
+                        </button>
+                    </div>
+
+                    <!-- File selected confirmation row (shown after selection, replaces drop zone) -->
+                    <div id="file-selected-row" style="display: none; background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(13, 148, 136, 0.3); border-radius: 10px; padding: 14px 18px; margin: 16px 0; align-items: center; gap: 14px;">
+                        <i class="fa-solid fa-file-csv" style="font-size: 1.6rem; color: var(--color-secondary);"></i>
+                        <div style="flex: 1;">
+                            <div id="selected-file-name" style="font-weight: 700; color: white; font-size: 0.95rem;">File Uploaded</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">Ready to analyze</div>
+                        </div>
+                        <button type="button" onclick="resetUploadArea()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;" title="Remove file">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button id="btn-analyze-dataset" class="btn" style="background-color: var(--color-primary); border: none; color: white; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; width: 100%; transition: var(--transition-smooth);" disabled>
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Analyze Dataset
+                        </button>
+                        <div style="display: flex; align-items: center; gap: 12px; margin: 14px 0;">
+                            <hr style="flex: 1; border: none; border-top: 1px solid var(--border-card);">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); white-space: nowrap;">or try with</span>
+                            <hr style="flex: 1; border: none; border-top: 1px solid var(--border-card);">
+                        </div>
+                        <button id="btn-load-demo" class="btn" style="background-color: transparent; border: 1px solid var(--color-secondary); color: var(--color-secondary); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; width: 100%; transition: var(--transition-smooth);">
+                            <i class="fa-solid fa-database"></i> Load Demo Data
+                        </button>
+                    </div>
+
+                    <div id="upload-progress-container" style="display: none; margin-top: 30px; border-top: 1px solid var(--border-card); padding-top: 20px;">
+                        <h4 style="margin-bottom: 20px; font-size: 1.1rem;"><i class="fa-solid fa-spinner fa-spin" id="upload-spinner" style="margin-right: 8px;"></i> Processing Pipeline</h4>
+                        <ul class="progress-steps" style="list-style: none; padding-left: 0;">
+                            <li id="step-validate" class="progress-step" style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-regular fa-circle"></i> Dataset validated
+                            </li>
+                            <li id="step-predict" class="progress-step" style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-regular fa-circle"></i> Churn prediction completed
+                            </li>
+                            <li id="step-shap" class="progress-step" style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-regular fa-circle"></i> Risk drivers identified
+                            </li>
+                            <li id="step-recommend" class="progress-step" style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-regular fa-circle"></i> Retention recommendations generated
+                            </li>
+                        </ul>
+                        <div id="upload-success-actions" style="display: none; text-align: center;">
+                            <button type="button" class="btn" onclick="document.getElementById('nav-dashboard').click();" style="background-color: var(--color-primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;">
+                                Go to Strategic Dashboard <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="upload-error-message" style="display: none; margin-top: 20px; padding: 12px; border-radius: 8px; background-color: var(--risk-high-bg); border: 1px solid rgba(244, 63, 94, 0.2); color: var(--risk-high); font-size: 0.9rem;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 0: Strategic Dashboard -->
+            <div id="dashboard-tab" class="tab-content">
+                <div class="intro-banner">
+                    <div class="intro-content">
+                        <h3>Strategic Retention Dashboard</h3>
+                        <p>High-level clinical and business health plan metrics. Target high-risk cohorts, monitor trends across tenure stages, and identify global churn drivers to guide outreach campaigns.</p>
+                    </div>
+                </div>
+
+                <!-- KPI Grid -->
+                <div class="dashboard-kpi-grid">
+                    <div class="kpi-card" id="kpi-total-members-card">
+                        <div class="kpi-details">
+                            <span class="kpi-label">Total Members</span>
+                            <span class="kpi-val" id="kpi-total-members">--</span>
+                        </div>
+                        <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                    <div class="kpi-card" id="kpi-high-risk-card">
+                        <div class="kpi-details">
+                            <span class="kpi-label">High / Critical Risk</span>
+                            <span class="kpi-val" id="kpi-high-risk">--</span>
+                        </div>
+                        <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    </div>
+                    <div class="kpi-card" id="kpi-avg-risk-card">
+                        <div class="kpi-details">
+                            <span class="kpi-label">Average Churn Risk</span>
+                            <span class="kpi-val" id="kpi-avg-risk">--</span>
+                        </div>
+                        <div class="kpi-icon"><i class="fa-solid fa-chart-bar"></i></div>
+                    </div>
+                    <div class="kpi-card" id="kpi-opportunities-card">
+                        <div class="kpi-details">
+                            <span class="kpi-label">Retention Opportunities</span>
+                            <span class="kpi-val" id="kpi-opportunities">--</span>
+                        </div>
+                        <div class="kpi-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="dashboard-charts-main">
+                    <section class="card chart-card">
+                        <div class="card-header">
+                            <div class="header-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                            <h3>Risk Distribution</h3>
+                            <p class="card-subtitle">Distribution of membership across churn risk bands</p>
+                        </div>
+                        <div class="chart-container" style="height: 300px; position: relative;">
+                            <canvas id="dashboard-risk-dist-chart"></canvas>
+                        </div>
+                    </section>
+                    <section class="card chart-card">
+                        <div class="card-header">
+                            <div class="header-icon"><i class="fa-solid fa-chart-line"></i></div>
+                            <h3>Risk Trend by Tenure</h3>
+                            <p class="card-subtitle">Average churn probability by membership longevity cohorts</p>
+                        </div>
+                        <div class="chart-container" style="height: 300px; position: relative;">
+                            <canvas id="dashboard-risk-trend-chart"></canvas>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Global Drivers Chart -->
+                <section class="card chart-card" style="margin-bottom: 32px;">
+                    <div class="card-header">
+                        <div class="header-icon"><i class="fa-solid fa-list-ol"></i></div>
+                        <h3>Top Factors Influencing Member Risk</h3>
+                        <p class="card-subtitle">Key member attributes that drive overall retention risk</p>
+                    </div>
+                    <div class="chart-container" style="height: 350px; position: relative;">
+                        <canvas id="dashboard-drivers-chart"></canvas>
+                    </div>
+                </section>
+
+                <!-- High-Risk Members Table -->
+                <section class="card table-card" style="margin-bottom: 32px;">
+                    <div class="card-header">
+                        <div class="header-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <h3>High-Risk Plan Members</h3>
+                        <p class="card-subtitle">List of members flagged as High or Critical Risk. Proactive outreach recommended.</p>
+                    </div>
+                    <div style="padding: 20px; overflow-x: auto;">
+                        <table class="data-table" id="high-risk-members-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--border-card);">
+                                    <th style="padding: 12px; font-weight: 700;">Member ID</th>
+                                    <th style="padding: 12px; font-weight: 700;">Plan Type</th>
+                                    <th style="padding: 12px; font-weight: 700;">Tenure (Months)</th>
+                                    <th style="padding: 12px; font-weight: 700;">Risk Score</th>
+                                    <th style="padding: 12px; font-weight: 700;">Risk Level</th>
+                                    <th style="padding: 12px; font-weight: 700;">Primary Driver</th>
+                                    <th style="padding: 12px; font-weight: 700; text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="high-risk-table-body">
+                                <tr>
+                                    <td colspan="7" style="padding: 20px; text-align: center; color: var(--text-muted);">
+                                        No dataset analyzed yet. Upload a CSV file to see high-risk members.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="responsible-ai-footer" style="padding: 15px 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-card); background: rgba(0, 0, 0, 0.2);">
+                        <strong>Responsible AI Disclaimer:</strong> Risk scores are estimated indicators and do not guarantee disenrollment. Risk drivers describe observed patterns rather than confirmed reasons for member behavior. Retention recommendations are decision-support suggestions and require human review.
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB: Member Details -->
+            <div id="member-details-tab" class="tab-content">
+                <!-- Load Member Details Header Card -->
+                <div class="card selector-card" style="margin-bottom: 32px;">
+                    <div class="card-header" style="padding: 16px 20px; border-bottom: 1px solid var(--border-card);">
+                        <div class="header-icon"><i class="fa-solid fa-user-magnifying-glass"></i></div>
+                        <h3>Select Plan Member</h3>
+                        <p class="card-subtitle" style="margin: 4px 0 0 0;">Select a member ID to view their risk score, key risk drivers, and recommended retention actions.</p>
+                    </div>
+                    <div style="padding: 20px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="detail-member-selector" style="font-weight: 700; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase;">Select Member ID:</label>
+                            <select id="detail-member-selector" style="background-color: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-card); color: white; padding: 10px 16px; border-radius: 8px; width: 280px; font-family: var(--font-main); font-size: 0.95rem; font-weight: 600; outline: none; transition: var(--transition-smooth);">
+                                <option value="">-- Choose Member ID --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overview Layout -->
+                <div id="member-details-results-area" style="display: none;">
+                    <!-- Member Profile Overview Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 32px;">
+                        <div class="kpi-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));">
+                            <div class="kpi-details">
+                                <span class="kpi-label">Member ID</span>
+                                <span class="kpi-val" id="detail-id" style="font-size: 1.5rem;">--</span>
+                            </div>
+                            <div class="kpi-icon"><i class="fa-solid fa-id-card"></i></div>
+                        </div>
+                        <div class="kpi-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));">
+                            <div class="kpi-details">
+                                <span class="kpi-label">Insurance Plan</span>
+                                <span class="kpi-val" id="detail-plan" style="font-size: 1.5rem;">--</span>
+                            </div>
+                            <div class="kpi-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                        </div>
+                        <div class="kpi-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));">
+                            <div class="kpi-details">
+                                <span class="kpi-label">Tenure</span>
+                                <span class="kpi-val" id="detail-tenure" style="font-size: 1.5rem;">-- months</span>
+                            </div>
+                            <div class="kpi-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        </div>
+                        <div class="kpi-card" id="detail-risk-lvl-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));">
+                            <div class="kpi-details">
+                                <span class="kpi-label">Risk Score / Level</span>
+                                <span class="kpi-val" id="detail-churn-prob" style="font-size: 1.5rem;">--</span>
+                            </div>
+                            <div class="kpi-icon" id="detail-risk-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Explainability & Recommendations Grid -->
+                    <div class="simulator-grid">
+                        <!-- Left Column: Risk Drivers -->
+                        <section class="card explanation-card">
+                            <div class="card-header">
+                                <div class="header-icon"><i class="fa-solid fa-brain"></i></div>
+                                <h3>Why is this member at risk?</h3>
+                                <p class="card-subtitle">Key member-specific factors contributing to risk</p>
+                            </div>
+                            <div class="chart-container-small" style="height: 350px;">
+                                <canvas id="detail-shap-chart"></canvas>
+                            </div>
+                            <div style="padding: 20px; border-top: 1px solid var(--border-card);">
+                                <h5 style="margin-bottom: 10px; color: var(--text-secondary);"><i class="fa-solid fa-list-check"></i> Evidence-Based Explanations</h5>
+                                <ul id="detail-drivers-text-list" style="list-style: none; padding-left: 0; font-size: 0.9rem;">
+                                    <!-- Dynamically populated -->
+                                </ul>
+                            </div>
+                        </section>
+
+                        <!-- Right Column: Advisor Recommendations -->
+                        <section class="card advisor-card">
+                            <div class="card-header">
+                                <div class="header-icon"><i class="fa-solid fa-user-shield"></i></div>
+                                <h3>Retention Advisor Suggestions</h3>
+                                <p class="card-subtitle">Transparent rule-based suggestion catalog mapped from patient-specific signals</p>
+                            </div>
+                            <div class="advisory-summary" id="detail-advisory-summary" style="margin-bottom: 20px;">
+                                --
+                            </div>
+                            <div class="intervention-list" id="detail-recommendations-list">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Unload Fallback Message -->
+                <div id="member-details-fallback-area" class="card" style="padding: 40px; text-align: center; border: 1px dashed var(--border-card);">
+                    <i class="fa-solid fa-circle-info" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 15px;"></i>
+                    <p style="font-size: 1.1rem; font-weight: 500;">No Member Selected</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Please upload and analyze a dataset, then select a member ID from the dropdown or click "View Profile" on the Strategic Dashboard.</p>
+                </div>
+
+                <!-- Disclaimer footer -->
+                <div class="responsible-ai-footer card" style="margin-top: 32px; padding: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; border-left: 4px solid var(--color-secondary);">
+                    <strong>Responsible AI Disclaimer:</strong> Risk scores are model-estimated probabilities and do not guarantee disenrollment. Risk drivers describe model-associated patterns rather than confirmed reasons for member behavior. Retention recommendations are decision-support suggestions and require human review. We do not display medical diagnoses, make automatic disenrollment decisions, or make unsupported assumptions regarding member emotions, intentions, health status, or financial conditions.
+                </div>
+            </div>
+
+            <!-- TAB 1: Advisor Simulator -->
+            <div id="simulator-tab" class="tab-content">
+                <!-- Load Member Selection Card -->
+                <div class="card selector-card" style="margin-bottom: 32px;">
+                    <div class="card-header" style="padding: 16px 20px; border-bottom: 1px solid var(--border-card);">
+                        <div class="header-icon"><i class="fa-solid fa-user-check"></i></div>
+                        <h3>Load Real Member Profile</h3>
+                        <p class="card-subtitle" style="margin: 4px 0 0 0;">Select a member ID from the dataset to automatically populate their clinical and behavioral features</p>
+                    </div>
+                    <div style="padding: 20px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label for="member-selector" style="font-weight: 700; font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase;">Select Member ID:</label>
+                            <select id="member-selector" style="background-color: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-card); color: white; padding: 10px 16px; border-radius: 8px; width: 260px; font-family: var(--font-main); font-size: 0.95rem; font-weight: 600; outline: none; transition: var(--transition-smooth);">
+                                <option value="">-- Load Simulator Form --</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 15px;">
+                            <span id="load-status" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Connecting to REST API...</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Overview Banner -->
+                <div class="intro-banner">
+                    <div class="intro-content">
+                        <h3>Individual Member Risk Assessment</h3>
+                        <p>Enter a member's details to instantly see their estimated churn risk, which factors are driving that risk, and what actions your team can take to retain them.</p>
+                    </div>
+                </div>
+
+                <div class="simulator-grid">
+                    <!-- Left Column: Input Form -->
+                    <section class="card form-card">
+                        <div class="card-header">
+                            <div class="header-icon"><i class="fa-solid fa-sliders"></i></div>
+                            <h3>Member Profile</h3>
+                            <p class="card-subtitle">Fill in the member's details to run a risk assessment</p>
+                        </div>
+                        <form id="simulator-form" class="simulator-form">
+                            <!-- Demographics Section -->
+                            <div class="form-section">
+                                <h4 class="section-title"><i class="fa-solid fa-user"></i> Demographics</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="input-Age">Age</label>
+                                        <input type="number" id="input-Age" name="Age" min="18" max="90" value="45" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-Gender">Gender</label>
+                                        <select id="input-Gender" name="Gender" required>
+                                            <option value="Female">Female</option>
+                                            <option value="Male" selected>Male</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-State">State</label>
+                                        <select id="input-State" name="State" required>
+                                            <!-- Dynamically populated, fallback hardcoded -->
+                                            <option value="CA">California (CA)</option>
+                                            <option value="FL">Florida (FL)</option>
+                                            <option value="GA">Georgia (GA)</option>
+                                            <option value="IL">Illinois (IL)</option>
+                                            <option value="MI" selected>Michigan (MI)</option>
+                                            <option value="NC">North Carolina (NC)</option>
+                                            <option value="NY">New York (NY)</option>
+                                            <option value="OH">Ohio (OH)</option>
+                                            <option value="PA">Pennsylvania (PA)</option>
+                                            <option value="TX">Texas (TX)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Plan details & Engagement -->
+                            <div class="form-section">
+                                <h4 class="section-title"><i class="fa-solid fa-hospital-user"></i> Plan Engagement</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="input-Tenure_Months">Tenure (Months)</label>
+                                        <input type="number" id="input-Tenure_Months" name="Tenure_Months" min="1" max="120" value="60" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-Insurance_Type">Insurance Type</label>
+                                        <select id="input-Insurance_Type" name="Insurance_Type" required>
+                                            <option value="Private" selected>Private</option>
+                                            <option value="Medicare">Medicare</option>
+                                            <option value="Medicaid">Medicaid</option>
+                                            <option value="Self-Pay">Self-Pay</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-Distance_To_Facility_Miles">Distance to Facility (mi)</label>
+                                        <input type="number" step="0.1" id="input-Distance_To_Facility_Miles" name="Distance_To_Facility_Miles" min="0.5" max="50" value="12.5" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="input-Visits_Last_Year">Visits (Last Year)</label>
+                                        <input type="number" id="input-Visits_Last_Year" name="Visits_Last_Year" min="0" max="15" value="6" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-Missed_Appointments">Missed Appointments</label>
+                                        <input type="number" id="input-Missed_Appointments" name="Missed_Appointments" min="0" max="5" value="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-Days_Since_Last_Visit">Days Since Last Visit</label>
+                                        <input type="number" id="input-Days_Since_Last_Visit" name="Days_Since_Last_Visit" min="1" max="730" value="120" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="input-Referrals_Made">Referrals Made</label>
+                                        <input type="number" id="input-Referrals_Made" name="Referrals_Made" min="0" max="3" value="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-Avg_Out_Of_Pocket_Cost">Avg Out of Pocket Cost ($)</label>
+                                        <input type="number" id="input-Avg_Out_Of_Pocket_Cost" name="Avg_Out_Of_Pocket_Cost" min="20" max="2000" value="450" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-Specialty">Primary Care/Specialty</label>
+                                        <select id="input-Specialty" name="Specialty" required>
+                                            <option value="Family Medicine" selected>Family Medicine</option>
+                                            <option value="General Practice">General Practice</option>
+                                            <option value="Internal Medicine">Internal Medicine</option>
+                                            <option value="Pediatrics">Pediatrics</option>
+                                            <option value="Cardiology">Cardiology</option>
+                                            <option value="Neurology">Neurology</option>
+                                            <option value="Orthopedics">Orthopedics</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Satisfaction Scores -->
+                            <div class="form-section">
+                                <h4 class="section-title"><i class="fa-solid fa-star-half-stroke"></i> Experience & Satisfaction</h4>
+                                <div class="form-row sliders">
+                                    <div class="form-group range-group">
+                                        <div class="range-labels">
+                                            <label for="input-Overall_Satisfaction">Overall Satisfaction</label>
+                                            <span class="range-val" id="val-Overall_Satisfaction">3.5</span>
+                                        </div>
+                                        <input type="range" id="input-Overall_Satisfaction" name="Overall_Satisfaction" min="1.5" max="5.0" step="0.1" value="3.5">
+                                    </div>
+                                    <div class="form-group range-group">
+                                        <div class="range-labels">
+                                            <label for="input-Wait_Time_Satisfaction">Wait Time Satisfaction</label>
+                                            <span class="range-val" id="val-Wait_Time_Satisfaction">3.5</span>
+                                        </div>
+                                        <input type="range" id="input-Wait_Time_Satisfaction" name="Wait_Time_Satisfaction" min="1.5" max="5.0" step="0.1" value="3.5">
+                                    </div>
+                                </div>
+                                <div class="form-row sliders">
+                                    <div class="form-group range-group">
+                                        <div class="range-labels">
+                                            <label for="input-Staff_Satisfaction">Staff Satisfaction</label>
+                                            <span class="range-val" id="val-Staff_Satisfaction">3.5</span>
+                                        </div>
+                                        <input type="range" id="input-Staff_Satisfaction" name="Staff_Satisfaction" min="2.0" max="5.0" step="0.1" value="3.5">
+                                    </div>
+                                    <div class="form-group range-group">
+                                        <div class="range-labels">
+                                            <label for="input-Provider_Rating">Provider Rating</label>
+                                            <span class="range-val" id="val-Provider_Rating">3.5</span>
+                                        </div>
+                                        <input type="range" id="input-Provider_Rating" name="Provider_Rating" min="2.5" max="5.0" step="0.1" value="3.5">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Administrative and Flags -->
+                            <div class="form-section">
+                                <h4 class="section-title"><i class="fa-solid fa-flag"></i> Operational Flags</h4>
+                                <div class="form-row switches">
+                                    <div class="switch-group">
+                                        <span class="switch-label">Billing Issues Reported</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="input-Billing_Issues" name="Billing_Issues">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="switch-group">
+                                        <span class="switch-label">Patient Portal Active</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="input-Portal_Usage" name="Portal_Usage" checked>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Right Column: Outputs -->
+                    <div class="outputs-column">
+                        <!-- Card 1: Churn Risk Score -->
+                        <section class="card prediction-card">
+                            <div class="card-header">
+                                <div class="header-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                                <h3>Estimated Churn Risk</h3>
+                                <p class="card-subtitle">How likely is this member to leave their plan?</p>
+                            </div>
+                            <div class="gauges-container" style="justify-content: center;">
+                                <!-- Primary Risk Gauge -->
+                                <div class="gauge-wrapper">
+                                    <div class="gauge-title">Churn Probability</div>
+                                    <div class="gauge-body">
+                                        <svg viewBox="0 0 100 50" class="gauge-svg">
+                                            <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" />
+                                            <path class="gauge-fill" id="lr-gauge-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+                                        </svg>
+                                        <div class="gauge-value" id="lr-churn-prob">0.0%</div>
+                                    </div>
+                                    <div class="gauge-description">Model-estimated probability of disenrollment</div>
+                                </div>
+                                <!-- Risk Level Badge -->
+                                <div class="gauge-wrapper">
+                                    <div class="gauge-title">Risk Level</div>
+                                    <div class="gauge-body">
+                                        <svg viewBox="0 0 100 50" class="gauge-svg">
+                                            <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" />
+                                            <path class="gauge-fill" id="dt-gauge-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+                                        </svg>
+                                        <div class="gauge-value" id="dt-churn-prob">0.0%</div>
+                                    </div>
+                                    <div class="gauge-description">Urgency tier based on probability range</div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Card 2: Strategic Intervention advisor -->
+                        <section class="card advisor-card">
+                            <div class="card-header">
+                                <div class="header-icon"><i class="fa-solid fa-user-shield"></i></div>
+                                <h3>Retention Advisory Console</h3>
+                            </div>
+                            <div class="advisory-summary" id="advisory-summary">
+                                Member is currently at Low Risk. Active monitoring recommended.
+                            </div>
+                            <div class="intervention-list" id="intervention-list">
+                                <!-- Interventions populated dynamically in app.js -->
+                            </div>
+                        </section>
+
+                        <!-- Card 3: What's driving the risk -->
+                        <section class="card explanation-card">
+                            <div class="card-header">
+                                <div class="header-icon"><i class="fa-solid fa-brain"></i></div>
+                                <h3>What's Driving This Member's Risk?</h3>
+                                <p class="card-subtitle">Factors pushing the risk score up (red) or down (green)</p>
+                            </div>
+                            <div class="chart-container-small">
+                                <canvas id="individual-breakdown-chart"></canvas>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Decision Tree Path section removed — replaced by SHAP drivers above -->
+            </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Load model_data.js first, then app.js -->
+    <script src="model_data.js?v=2026"></script>
+    <script src="main_app.js?v=1"></script>
+</body>
+</html>

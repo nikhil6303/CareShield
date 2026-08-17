@@ -1,0 +1,43 @@
+feature
+Age
+Tenure_Months
+Visits_Last_Year
+Missed_Appointments
+Days_Since_Last_Visit
+Overall_Satisfaction
+Wait_Time_Satisfaction
+Staff_Satisfaction
+Provider_Rating
+Avg_Out_Of_Pocket_Cost
+Billing_Issues
+Portal_Usage
+Referrals_Made
+Distance_To_Facility_Miles
+days_since_interaction
+interaction_month
+missed_appt_rate
+composite_satisfaction
+engagement_score
+cost_per_tenure_month
+is_low_satisfaction
+is_distant
+monthly_visit_rate
+Gender_Male
+State_FL
+State_GA
+State_IL
+State_MI
+State_NC
+State_NY
+State_OH
+State_PA
+State_TX
+Specialty_Family Medicine
+Specialty_General Practice
+Specialty_Internal Medicine
+Specialty_Neurology
+Specialty_Orthopedics
+Specialty_Pediatrics
+Insurance_Type_Medicare
+Insurance_Type_Private
+Insurance_Type_Self-Pay
