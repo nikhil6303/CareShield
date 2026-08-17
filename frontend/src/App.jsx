@@ -13,8 +13,12 @@ import DatasetUpload from './components/DatasetUpload';
 import RetentionAdvisor from './components/RetentionAdvisor';
 import { RiskDistributionChart, RiskTrendChart, TopDriversChart } from './components/AnalyticsCharts';
 
-// Base API URL
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+// Base API URL: Points to local Flask backend during local Vite dev (port 3000/5173), and defaults to relative paths in production
+const API_URL = (import.meta.env.VITE_API_URL !== undefined && import.meta.env.VITE_API_URL !== '')
+  ? import.meta.env.VITE_API_URL
+  : (typeof window !== 'undefined' && (window.location.port === '3000' || window.location.port === '5173'))
+    ? 'http://127.0.0.1:5000'
+    : '';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('upload'); // 'upload' | 'dashboard' | 'members' | 'details' | 'simulator' | 'analytics'

@@ -41,7 +41,11 @@ warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
+import sys
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.join(APP_DIR, 'src')
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
 
 # Initialize Flask app
 app = Flask(__name__, static_folder=None)
@@ -129,13 +133,17 @@ CATEGORICAL_FEATURE_COLUMNS = ["Gender", "State", "Specialty", "Insurance_Type"]
 class DatasetValidationError(ValueError):
     """Raised when an uploaded member dataset cannot be safely analyzed."""
 
-# Serve React SPA (frontend/dist) or root static assets for single-server zero-latency deployment
+# Serve React SPA (frontend/dist), Flask templates, or static assets
 FRONTEND_DIST = os.path.join(APP_DIR, 'frontend', 'dist')
+TEMPLATES_DIR = os.path.join(APP_DIR, 'templates')
+STATIC_DIR = os.path.join(APP_DIR, 'static')
 
 @app.route('/')
 def serve_index():
     if os.path.exists(os.path.join(FRONTEND_DIST, 'index.html')):
         return send_from_directory(FRONTEND_DIST, 'index.html', max_age=0)
+    if os.path.exists(os.path.join(TEMPLATES_DIR, 'index.html')):
+        return send_from_directory(TEMPLATES_DIR, 'index.html', max_age=0)
     return send_from_directory(APP_DIR, 'index.html', max_age=0)
 
 @app.route('/assets/<path:path>')
@@ -145,17 +153,32 @@ def serve_dist_assets(path):
         return send_from_directory(dist_assets, path, max_age=0)
     return ("Asset not found", 404)
 
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    if os.path.exists(STATIC_DIR):
+        return send_from_directory(STATIC_DIR, filename, max_age=0)
+    return ("Static file not found", 404)
+
 @app.route('/app.js')
 @app.route('/main_app.js')
 def serve_app_js():
+    if os.path.exists(os.path.join(STATIC_DIR, 'app.js')):
+        return send_from_directory(STATIC_DIR, 'app.js', max_age=0)
     return send_from_directory(APP_DIR, 'app.js', max_age=0)
 
 @app.route('/styles.css')
+@app.route('/style.css')
 def serve_styles_css():
+    if os.path.exists(os.path.join(STATIC_DIR, 'style.css')):
+        return send_from_directory(STATIC_DIR, 'style.css', max_age=0)
+    if os.path.exists(os.path.join(STATIC_DIR, 'styles.css')):
+        return send_from_directory(STATIC_DIR, 'styles.css', max_age=0)
     return send_from_directory(APP_DIR, 'styles.css', max_age=0)
 
 @app.route('/model_data.js')
 def serve_model_data_js():
+    if os.path.exists(os.path.join(STATIC_DIR, 'model_data.js')):
+        return send_from_directory(STATIC_DIR, 'model_data.js', max_age=0)
     return send_from_directory(APP_DIR, 'model_data.js', max_age=0)
 
 # ------------------------------------------------------------------------------
@@ -989,7 +1012,9 @@ def load_demo():
     Used by the 'Load Demo Data' button so no file dialog is needed.
     """
     import io
-    demo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'patient_churn_dataset.csv.xls')
+    demo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'dataset.csv')
+    if not os.path.exists(demo_path):
+        demo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'patient_churn_dataset.csv.xls')
     if not os.path.exists(demo_path):
         return jsonify({"error": "Demo dataset not found on server."}), 404
     try:

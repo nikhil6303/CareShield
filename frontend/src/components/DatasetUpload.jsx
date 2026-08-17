@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { UploadCloud, FileSpreadsheet, CheckCircle2, AlertCircle, Loader2, ArrowRight, X, Sparkles, Database } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
+const API_URL = (import.meta.env.VITE_API_URL !== undefined && import.meta.env.VITE_API_URL !== '')
+  ? import.meta.env.VITE_API_URL
+  : (typeof window !== 'undefined' && (window.location.port === '3000' || window.location.port === '5173'))
+    ? 'http://127.0.0.1:5000'
+    : '';
 
 const DatasetUpload = ({ onUploadSuccess, onNavigateToDashboard }) => {
   const [selectedFile, setSelectedFile] = useState(null);

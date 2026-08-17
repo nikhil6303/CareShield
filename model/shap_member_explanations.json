@@ -1,0 +1,198 @@
+[
+  {
+    "member_id": "C21047",
+    "risk_score": 0.3534,
+    "risk_level": "Low",
+    "drivers": [
+      {
+        "feature": "missed_appt_rate",
+        "label": "Missed appointment rate",
+        "value": "1.000",
+        "shap_value": 0.4351,
+        "impact": "Missed appointment rate is associated with increased predicted churn risk (SHAP contribution: +0.4351).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Staff_Satisfaction",
+        "label": "Staff satisfaction score",
+        "value": "3.800",
+        "shap_value": 0.2554,
+        "impact": "Staff satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2554).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Portal_Usage",
+        "label": "Patient portal usage (0/1)",
+        "value": "1",
+        "shap_value": -0.2363,
+        "impact": "Patient portal usage (0/1) is associated with decreased predicted churn risk (SHAP contribution: -0.2363).",
+        "direction": "decreases_risk"
+      },
+      {
+        "feature": "Visits_Last_Year",
+        "label": "Visits in last year",
+        "value": "1",
+        "shap_value": -0.2083,
+        "impact": "Visits in last year is associated with decreased predicted churn risk (SHAP contribution: -0.2083).",
+        "direction": "decreases_risk"
+      },
+      {
+        "feature": "Distance_To_Facility_Miles",
+        "label": "Distance to facility (miles)",
+        "value": "11.000",
+        "shap_value": -0.2064,
+        "impact": "Distance to facility (miles) is associated with decreased predicted churn risk (SHAP contribution: -0.2064).",
+        "direction": "decreases_risk"
+      }
+    ],
+    "waterfall_plot": "outputs\\shap_plots\\shap_waterfall_C21047.png",
+    "error": null
+  },
+  {
+    "member_id": "C21002",
+    "risk_score": 0.5723,
+    "risk_level": "Medium",
+    "drivers": [
+      {
+        "feature": "composite_satisfaction",
+        "label": "Composite satisfaction score",
+        "value": "2.825",
+        "shap_value": 0.2695,
+        "impact": "Composite satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2695).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Overall_Satisfaction",
+        "label": "Overall satisfaction score",
+        "value": "2.600",
+        "shap_value": 0.2365,
+        "impact": "Overall satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2365).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Age",
+        "label": "Age (years)",
+        "value": "37",
+        "shap_value": 0.2284,
+        "impact": "Age (years) is associated with increased predicted churn risk (SHAP contribution: +0.2284).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Days_Since_Last_Visit",
+        "label": "Days since last clinical visit",
+        "value": "311",
+        "shap_value": -0.1729,
+        "impact": "Days since last clinical visit is associated with decreased predicted churn risk (SHAP contribution: -0.1729).",
+        "direction": "decreases_risk"
+      },
+      {
+        "feature": "Visits_Last_Year",
+        "label": "Visits in last year",
+        "value": "4",
+        "shap_value": -0.1443,
+        "impact": "Visits in last year is associated with decreased predicted churn risk (SHAP contribution: -0.1443).",
+        "direction": "decreases_risk"
+      }
+    ],
+    "waterfall_plot": "outputs\\shap_plots\\shap_waterfall_C21002.png",
+    "error": null
+  },
+  {
+    "member_id": "C20983",
+    "risk_score": 0.8384,
+    "risk_level": "High",
+    "drivers": [
+      {
+        "feature": "composite_satisfaction",
+        "label": "Composite satisfaction score",
+        "value": "2.700",
+        "shap_value": 0.5249,
+        "impact": "Composite satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.5249).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Overall_Satisfaction",
+        "label": "Overall satisfaction score",
+        "value": "1.500",
+        "shap_value": 0.5137,
+        "impact": "Overall satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.5137).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Distance_To_Facility_Miles",
+        "label": "Distance to facility (miles)",
+        "value": "45.000",
+        "shap_value": 0.4072,
+        "impact": "Distance to facility (miles) is associated with increased predicted churn risk (SHAP contribution: +0.4072).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "missed_appt_rate",
+        "label": "Missed appointment rate",
+        "value": "1.000",
+        "shap_value": 0.3567,
+        "impact": "Missed appointment rate is associated with increased predicted churn risk (SHAP contribution: +0.3567).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Tenure_Months",
+        "label": "Membership tenure (months)",
+        "value": "105",
+        "shap_value": -0.2991,
+        "impact": "Membership tenure (months) is associated with decreased predicted churn risk (SHAP contribution: -0.2991).",
+        "direction": "decreases_risk"
+      }
+    ],
+    "waterfall_plot": "outputs\\shap_plots\\shap_waterfall_C20983.png",
+    "error": null
+  },
+  {
+    "member_id": "C21031",
+    "risk_score": 0.8834,
+    "risk_level": "Critical",
+    "drivers": [
+      {
+        "feature": "Age",
+        "label": "Age (years)",
+        "value": "18",
+        "shap_value": 0.6883,
+        "impact": "Age (years) is associated with increased predicted churn risk (SHAP contribution: +0.6883).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "composite_satisfaction",
+        "label": "Composite satisfaction score",
+        "value": "2.675",
+        "shap_value": 0.3731,
+        "impact": "Composite satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.3731).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Provider_Rating",
+        "label": "Provider rating",
+        "value": "2.600",
+        "shap_value": 0.3386,
+        "impact": "Provider rating is associated with increased predicted churn risk (SHAP contribution: +0.3386).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Tenure_Months",
+        "label": "Membership tenure (months)",
+        "value": "35",
+        "shap_value": 0.3004,
+        "impact": "Membership tenure (months) is associated with increased predicted churn risk (SHAP contribution: +0.3004).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Overall_Satisfaction",
+        "label": "Overall satisfaction score",
+        "value": "1.700",
+        "shap_value": 0.262,
+        "impact": "Overall satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2620).",
+        "direction": "increases_risk"
+      }
+    ],
+    "waterfall_plot": "outputs\\shap_plots\\shap_waterfall_C21031.png",
+    "error": null
+  }
+]

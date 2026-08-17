@@ -1,0 +1,440 @@
+[
+  {
+    "member_id": "C21047",
+    "risk_score": 0.3534,
+    "risk_level": "Low",
+    "shap_drivers": [
+      {
+        "feature": "missed_appt_rate",
+        "label": "Missed appointment rate",
+        "value": "1.000",
+        "shap_value": 0.4351,
+        "impact": "Missed appointment rate is associated with increased predicted churn risk (SHAP contribution: +0.4351).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Staff_Satisfaction",
+        "label": "Staff satisfaction score",
+        "value": "3.800",
+        "shap_value": 0.2554,
+        "impact": "Staff satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2554).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Portal_Usage",
+        "label": "Patient portal usage (0/1)",
+        "value": "1",
+        "shap_value": -0.2363,
+        "impact": "Patient portal usage (0/1) is associated with decreased predicted churn risk (SHAP contribution: -0.2363).",
+        "direction": "decreases_risk"
+      },
+      {
+        "feature": "Visits_Last_Year",
+        "label": "Visits in last year",
+        "value": "1",
+        "shap_value": -0.2083,
+        "impact": "Visits in last year is associated with decreased predicted churn risk (SHAP contribution: -0.2083).",
+        "direction": "decreases_risk"
+      },
+      {
+        "feature": "Distance_To_Facility_Miles",
+        "label": "Distance to facility (miles)",
+        "value": "11.000",
+        "shap_value": -0.2064,
+        "impact": "Distance to facility (miles) is associated with decreased predicted churn risk (SHAP contribution: -0.2064).",
+        "direction": "decreases_risk"
+      }
+    ],
+    "recommendations": [
+      {
+        "rule_id": "GE-005",
+        "action": "General Member Engagement -- Routine Member Monitoring",
+        "category": "General Member Engagement",
+        "priority": "Low",
+        "reason": "Standard routine monitoring applies to all members regardless of current risk signal. This is a baseline engagement recommendation.",
+        "evidence": [
+          "Risk level at time of assessment: Low",
+          "Tenure: 26 months",
+          "Visits last year: 1"
+        ],
+        "suggested_next_step": "Include member in standard periodic engagement communications and routine care reminder workflows. Human review required before contact."
+      }
+    ],
+    "total_recommendations": 1,
+    "disclaimer": "This output is produced by a rule-based decision-support tool. No claims about member intent, health status, or financial situation are made. Human review is required before any action is taken."
+  },
+  {
+    "member_id": "C21002",
+    "risk_score": 0.5723,
+    "risk_level": "Medium",
+    "shap_drivers": [
+      {
+        "feature": "composite_satisfaction",
+        "label": "Composite satisfaction score",
+        "value": "2.825",
+        "shap_value": 0.2695,
+        "impact": "Composite satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2695).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Overall_Satisfaction",
+        "label": "Overall satisfaction score",
+        "value": "2.600",
+        "shap_value": 0.2365,
+        "impact": "Overall satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2365).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Age",
+        "label": "Age (years)",
+        "value": "37",
+        "shap_value": 0.2284,
+        "impact": "Age (years) is associated with increased predicted churn risk (SHAP contribution: +0.2284).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Days_Since_Last_Visit",
+        "label": "Days since last clinical visit",
+        "value": "311",
+        "shap_value": -0.1729,
+        "impact": "Days since last clinical visit is associated with decreased predicted churn risk (SHAP contribution: -0.1729).",
+        "direction": "decreases_risk"
+      },
+      {
+        "feature": "Visits_Last_Year",
+        "label": "Visits in last year",
+        "value": "4",
+        "shap_value": -0.1443,
+        "impact": "Visits in last year is associated with decreased predicted churn risk (SHAP contribution: -0.1443).",
+        "direction": "decreases_risk"
+      }
+    ],
+    "recommendations": [
+      {
+        "rule_id": "CO-003",
+        "action": "Care Outreach -- Frequent Missed Appointments",
+        "category": "Care Outreach",
+        "priority": "High",
+        "reason": "Missed appointment count is 3 or more (above the 75th percentile). This is an observable care access barrier signal.",
+        "evidence": [
+          "Missed appointments: 3 (population 75th percentile: 3; max: 5)",
+          "Distance to facility: 30.3 miles -- access barrier may be a contributing factor"
+        ],
+        "suggested_next_step": "Consider whether telehealth, transportation support information, or appointment reminder tools are applicable. Human review required before contact."
+      },
+      {
+        "rule_id": "BE-001",
+        "action": "Benefit Education -- No Portal Enrollment",
+        "category": "Benefit Education",
+        "priority": "Medium",
+        "reason": "Portal usage is recorded as 0, indicating the member has not used the member portal. Portal non-engagement is a measurable signal in this dataset.",
+        "evidence": [
+          "Portal usage: 0 (member portal not used)",
+          "Tenure: 30 months (portal non-use over the full tenure period)"
+        ],
+        "suggested_next_step": "Consider sharing portal enrollment and feature information through standard member communication channels. Human review required before contact."
+      },
+      {
+        "rule_id": "GE-004",
+        "action": "General Member Engagement -- Composite Satisfaction Risk Driver",
+        "category": "General Member Engagement",
+        "priority": "Medium",
+        "reason": "Composite satisfaction score is identified as an increasing-risk driver and overall satisfaction is below the population median (3.2). This is a multi-satisfaction-dimension signal.",
+        "evidence": [
+          "Overall satisfaction: 2.6 (population median: 3.2)",
+          "Staff satisfaction: 3.2",
+          "Wait-time satisfaction: 2.7",
+          "Provider rating: 2.8"
+        ],
+        "suggested_next_step": "Consider a general member satisfaction survey or check-in communication. Human review required before contact."
+      },
+      {
+        "rule_id": "GE-005",
+        "action": "General Member Engagement -- Routine Member Monitoring",
+        "category": "General Member Engagement",
+        "priority": "Low",
+        "reason": "Standard routine monitoring applies to all members regardless of current risk signal. This is a baseline engagement recommendation.",
+        "evidence": [
+          "Risk level at time of assessment: Medium",
+          "Tenure: 30 months",
+          "Visits last year: 4"
+        ],
+        "suggested_next_step": "Include member in standard periodic engagement communications and routine care reminder workflows. Human review required before contact."
+      }
+    ],
+    "total_recommendations": 4,
+    "disclaimer": "This output is produced by a rule-based decision-support tool. No claims about member intent, health status, or financial situation are made. Human review is required before any action is taken."
+  },
+  {
+    "member_id": "C20983",
+    "risk_score": 0.8384,
+    "risk_level": "High",
+    "shap_drivers": [
+      {
+        "feature": "composite_satisfaction",
+        "label": "Composite satisfaction score",
+        "value": "2.700",
+        "shap_value": 0.5249,
+        "impact": "Composite satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.5249).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Overall_Satisfaction",
+        "label": "Overall satisfaction score",
+        "value": "1.500",
+        "shap_value": 0.5137,
+        "impact": "Overall satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.5137).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Distance_To_Facility_Miles",
+        "label": "Distance to facility (miles)",
+        "value": "45.000",
+        "shap_value": 0.4072,
+        "impact": "Distance to facility (miles) is associated with increased predicted churn risk (SHAP contribution: +0.4072).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "missed_appt_rate",
+        "label": "Missed appointment rate",
+        "value": "1.000",
+        "shap_value": 0.3567,
+        "impact": "Missed appointment rate is associated with increased predicted churn risk (SHAP contribution: +0.3567).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Tenure_Months",
+        "label": "Membership tenure (months)",
+        "value": "105",
+        "shap_value": -0.2991,
+        "impact": "Membership tenure (months) is associated with decreased predicted churn risk (SHAP contribution: -0.2991).",
+        "direction": "decreases_risk"
+      }
+    ],
+    "recommendations": [
+      {
+        "rule_id": "SR-002",
+        "action": "Service Recovery -- Low Overall Satisfaction",
+        "category": "Service Recovery",
+        "priority": "Critical",
+        "reason": "Overall satisfaction score is in the low range (below 2.5) and is identified as an increasing-risk driver by the model's SHAP analysis.",
+        "evidence": [
+          "Overall satisfaction score: 1.5 (below threshold of 2.5; population median: 3.2)"
+        ],
+        "suggested_next_step": "Initiate a service quality review for this member's recent encounters. Consider a structured member experience check-in call. Human review required before contact."
+      },
+      {
+        "rule_id": "CO-001",
+        "action": "Care Outreach -- Extended Gap in Clinical Visit",
+        "category": "Care Outreach",
+        "priority": "Critical",
+        "reason": "Days since last clinical visit is 365 or more. This is an observable care gap signal based on recorded visit history.",
+        "evidence": [
+          "Days since last clinical visit: 662 days (threshold: 365 days; population median: 363 days)"
+        ],
+        "suggested_next_step": "Consider including this member in standard preventive care gap notification workflows. A care coordinator may review appointment history. Human review required before contact."
+      },
+      {
+        "rule_id": "CO-004",
+        "action": "Care Outreach -- Geographic Access Barrier",
+        "category": "Care Outreach",
+        "priority": "High",
+        "reason": "Distance to nearest facility is above 40 miles (above the 75th percentile) and is identified as an increasing-risk driver in the SHAP analysis. This is a measurable geographic access signal.",
+        "evidence": [
+          "Distance to facility: 45.0 miles (population 75th percentile: 37.2 miles)"
+        ],
+        "suggested_next_step": "Consider whether telehealth options or nearby network facility information are available to share. Human review required before contact."
+      },
+      {
+        "rule_id": "BE-001",
+        "action": "Benefit Education -- No Portal Enrollment",
+        "category": "Benefit Education",
+        "priority": "High",
+        "reason": "Portal usage is recorded as 0, indicating the member has not used the member portal. Portal non-engagement is a measurable signal in this dataset.",
+        "evidence": [
+          "Portal usage: 0 (member portal not used)",
+          "Tenure: 105 months (portal non-use over the full tenure period)"
+        ],
+        "suggested_next_step": "Consider sharing portal enrollment and feature information through standard member communication channels. Human review required before contact."
+      },
+      {
+        "rule_id": "BE-004",
+        "action": "Benefit Education -- Self-Pay or Medicaid Coverage Awareness",
+        "category": "Benefit Education",
+        "priority": "High",
+        "reason": "Insurance type is Self-Pay or Medicaid and out-of-pocket cost is above the population median. This is a measurable combination that may indicate relevant benefit information is available.",
+        "evidence": [
+          "Insurance type: Self-Pay",
+          "Average out-of-pocket cost: $1374 (population median: $716)"
+        ],
+        "suggested_next_step": "Consider sharing information on available cost-assistance programs, financial counselling resources, or plan benefit summaries. This is an informational action only. Human review required before contact."
+      },
+      {
+        "rule_id": "GE-002",
+        "action": "General Member Engagement -- Long-Tenure Low Engagement",
+        "category": "General Member Engagement",
+        "priority": "High",
+        "reason": "Member tenure is 60 months or more (at or above the population median) but portal usage is absent and annual visits are low. Long-tenure low-engagement is an observable dissonance signal.",
+        "evidence": [
+          "Tenure: 105 months (60+ months)",
+          "Portal usage: 0",
+          "Visits last year: 1"
+        ],
+        "suggested_next_step": "Consider loyalty-oriented member communication highlighting available plan services. Human review required before contact."
+      },
+      {
+        "rule_id": "GE-004",
+        "action": "General Member Engagement -- Composite Satisfaction Risk Driver",
+        "category": "General Member Engagement",
+        "priority": "High",
+        "reason": "Composite satisfaction score is identified as an increasing-risk driver and overall satisfaction is below the population median (3.2). This is a multi-satisfaction-dimension signal.",
+        "evidence": [
+          "Overall satisfaction: 1.5 (population median: 3.2)",
+          "Staff satisfaction: 3.7",
+          "Wait-time satisfaction: 2.9",
+          "Provider rating: 2.7"
+        ],
+        "suggested_next_step": "Consider a general member satisfaction survey or check-in communication. Human review required before contact."
+      },
+      {
+        "rule_id": "GE-005",
+        "action": "General Member Engagement -- Routine Member Monitoring",
+        "category": "General Member Engagement",
+        "priority": "Low",
+        "reason": "Standard routine monitoring applies to all members regardless of current risk signal. This is a baseline engagement recommendation.",
+        "evidence": [
+          "Risk level at time of assessment: High",
+          "Tenure: 105 months",
+          "Visits last year: 1"
+        ],
+        "suggested_next_step": "Include member in standard periodic engagement communications and routine care reminder workflows. Human review required before contact."
+      }
+    ],
+    "total_recommendations": 8,
+    "disclaimer": "This output is produced by a rule-based decision-support tool. No claims about member intent, health status, or financial situation are made. Human review is required before any action is taken."
+  },
+  {
+    "member_id": "C21031",
+    "risk_score": 0.8834,
+    "risk_level": "Critical",
+    "shap_drivers": [
+      {
+        "feature": "Age",
+        "label": "Age (years)",
+        "value": "18",
+        "shap_value": 0.6883,
+        "impact": "Age (years) is associated with increased predicted churn risk (SHAP contribution: +0.6883).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "composite_satisfaction",
+        "label": "Composite satisfaction score",
+        "value": "2.675",
+        "shap_value": 0.3731,
+        "impact": "Composite satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.3731).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Provider_Rating",
+        "label": "Provider rating",
+        "value": "2.600",
+        "shap_value": 0.3386,
+        "impact": "Provider rating is associated with increased predicted churn risk (SHAP contribution: +0.3386).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Tenure_Months",
+        "label": "Membership tenure (months)",
+        "value": "35",
+        "shap_value": 0.3004,
+        "impact": "Membership tenure (months) is associated with increased predicted churn risk (SHAP contribution: +0.3004).",
+        "direction": "increases_risk"
+      },
+      {
+        "feature": "Overall_Satisfaction",
+        "label": "Overall satisfaction score",
+        "value": "1.700",
+        "shap_value": 0.262,
+        "impact": "Overall satisfaction score is associated with increased predicted churn risk (SHAP contribution: +0.2620).",
+        "direction": "increases_risk"
+      }
+    ],
+    "recommendations": [
+      {
+        "rule_id": "SR-002",
+        "action": "Service Recovery -- Low Overall Satisfaction",
+        "category": "Service Recovery",
+        "priority": "Critical",
+        "reason": "Overall satisfaction score is in the low range (below 2.5) and is identified as an increasing-risk driver by the model's SHAP analysis.",
+        "evidence": [
+          "Overall satisfaction score: 1.7 (below threshold of 2.5; population median: 3.2)"
+        ],
+        "suggested_next_step": "Initiate a service quality review for this member's recent encounters. Consider a structured member experience check-in call. Human review required before contact."
+      },
+      {
+        "rule_id": "SR-004",
+        "action": "Service Recovery -- Provider Rating Signal",
+        "category": "Service Recovery",
+        "priority": "Critical",
+        "reason": "Provider rating is below 3.1 (25th percentile) and is an increasing-risk driver in the SHAP analysis. This reflects the member's recorded provider rating.",
+        "evidence": [
+          "Provider rating: 2.6 (below 3.1; population 25th percentile: 3.1)"
+        ],
+        "suggested_next_step": "Review whether the member has had consistent provider assignment. Consider whether care continuity options are available. Human review required before contact."
+      },
+      {
+        "rule_id": "CO-003",
+        "action": "Care Outreach -- Frequent Missed Appointments",
+        "category": "Care Outreach",
+        "priority": "Critical",
+        "reason": "Missed appointment count is 3 or more (above the 75th percentile). This is an observable care access barrier signal.",
+        "evidence": [
+          "Missed appointments: 5 (population 75th percentile: 3; max: 5)",
+          "Distance to facility: 20.6 miles"
+        ],
+        "suggested_next_step": "Consider whether telehealth, transportation support information, or appointment reminder tools are applicable. Human review required before contact."
+      },
+      {
+        "rule_id": "BE-001",
+        "action": "Benefit Education -- No Portal Enrollment",
+        "category": "Benefit Education",
+        "priority": "Critical",
+        "reason": "Portal usage is recorded as 0, indicating the member has not used the member portal. Portal non-engagement is a measurable signal in this dataset.",
+        "evidence": [
+          "Portal usage: 0 (member portal not used)",
+          "Tenure: 35 months (portal non-use over the full tenure period)"
+        ],
+        "suggested_next_step": "Consider sharing portal enrollment and feature information through standard member communication channels. Human review required before contact."
+      },
+      {
+        "rule_id": "GE-004",
+        "action": "General Member Engagement -- Composite Satisfaction Risk Driver",
+        "category": "General Member Engagement",
+        "priority": "Critical",
+        "reason": "Composite satisfaction score is identified as an increasing-risk driver and overall satisfaction is below the population median (3.2). This is a multi-satisfaction-dimension signal.",
+        "evidence": [
+          "Overall satisfaction: 1.7 (population median: 3.2)",
+          "Staff satisfaction: 3.6",
+          "Wait-time satisfaction: 2.8",
+          "Provider rating: 2.6"
+        ],
+        "suggested_next_step": "Consider a general member satisfaction survey or check-in communication. Human review required before contact."
+      },
+      {
+        "rule_id": "GE-005",
+        "action": "General Member Engagement -- Routine Member Monitoring",
+        "category": "General Member Engagement",
+        "priority": "Low",
+        "reason": "Standard routine monitoring applies to all members regardless of current risk signal. This is a baseline engagement recommendation.",
+        "evidence": [
+          "Risk level at time of assessment: Critical",
+          "Tenure: 35 months",
+          "Visits last year: 15"
+        ],
+        "suggested_next_step": "Include member in standard periodic engagement communications and routine care reminder workflows. Human review required before contact."
+      }
+    ],
+    "total_recommendations": 6,
+    "disclaimer": "This output is produced by a rule-based decision-support tool. No claims about member intent, health status, or financial situation are made. Human review is required before any action is taken."
+  }
+]
